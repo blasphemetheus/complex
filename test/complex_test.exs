@@ -718,9 +718,7 @@ defmodule ComplexTest do
     assert Complex.acosh(:infinity) == :infinity
     assert Complex.acosh(:nan) == :nan
 
-    assert_raise ArithmeticError, "Complex.acosh(:neg_infinity) is undefined", fn ->
-      Complex.acosh(:neg_infinity)
-    end
+    assert Complex.acosh(:neg_infinity) == :nan
   end
 
   for {m, f} <- [{Kernel, :inspect}, {String.Chars.Complex, :to_string}, {Complex, :to_string}] do
@@ -1069,6 +1067,16 @@ defmodule ComplexTest do
       assert Complex.atanh(-1.0) == :neg_infinity
       assert Complex.atanh(-1) == :neg_infinity
     end
+
+    test "atanh at non-finite values" do
+      assert Complex.atanh(:nan) == :nan
+      assert Complex.atanh(:infinity) == :nan
+      assert Complex.atanh(:neg_infinity) == :nan
+    end
+
+    test "acosh at negative infinity" do
+      assert Complex.acosh(:neg_infinity) == :nan
+    end
   end
 
   describe "IEEE 754: division by zero" do
@@ -1181,6 +1189,12 @@ defmodule ComplexTest do
     test "tanh(large) clamps to 1/-1" do
       assert Complex.tanh(1000) == 1.0
       assert Complex.tanh(-1000) == -1.0
+    end
+
+    test "tanh at infinities" do
+      assert Complex.tanh(:infinity) == 1.0
+      assert Complex.tanh(:neg_infinity) == -1.0
+      assert Complex.tanh(:nan) == :nan
     end
   end
 

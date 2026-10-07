@@ -1795,8 +1795,7 @@ defmodule Complex do
 
   def acosh(:infinity), do: :infinity
 
-  def acosh(:neg_infinity),
-    do: raise(ArithmeticError, "Complex.acosh(:neg_infinity) is undefined")
+  def acosh(:neg_infinity), do: :nan
 
   def acosh(:nan), do: :nan
 
@@ -1828,6 +1827,10 @@ defmodule Complex do
 
   def tanh(n) when is_number(n), do: :math.tanh(n)
 
+  def tanh(:infinity), do: 1.0
+  def tanh(:neg_infinity), do: -1.0
+  def tanh(:nan), do: :nan
+
   def tanh(z) do
     divide(sinh(z), cosh(z))
   end
@@ -1856,6 +1859,7 @@ defmodule Complex do
   def atanh(1.0), do: :infinity
   def atanh(-1), do: :neg_infinity
   def atanh(-1.0), do: :neg_infinity
+  def atanh(z) when is_non_finite_number(z), do: :nan
 
   if math_fun_supported?.(:atanh, 1) do
     def atanh(n) when is_number(n) do
